@@ -10,10 +10,15 @@ Auteur : AMEDRO Louis
 ### Importation Module :
 ######################################################
 
-import jeu
+import pygame, attributs
 
 ######################################################
-### Lancement du Jeu :
+### Classe Jeu :
 ######################################################
 
-jeu.Jeu().jouer()
+class Controle () :
+    
+    def __init__(self) :
+        pass
+    
+    
