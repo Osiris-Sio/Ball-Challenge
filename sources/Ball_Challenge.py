@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
--> ???
+-> Ball Challenge
 
 Auteur : AMEDRO Louis
 ''' 

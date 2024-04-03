@@ -23,9 +23,14 @@ class Controle () :
         
         self.attributs = les_attributs
         
+        self.appuye = False
+        
     ######################################################
     ### Accesseurs :
     ######################################################
+    
+    def acc_appuye(self):
+        return self.appuye
     
     def acc_position_curseur(self):
         return pygame.mouse.get_pos()
@@ -41,8 +46,16 @@ class Controle () :
         curseur = self.acc_position_curseur()
         
         #Jouer :
-        if 400 <= curseur[0] <= 600 and 400 <= curseur[1] <= 460 :
+        if 410 <= curseur[0] <= 600 and 400 <= curseur[1] <= 460 :
             self.attributs.mut_menu(False)
+            
+        #Options :
+        if 410 <= curseur[0] <= 600 and 500 <= curseur[1] <= 560 :
+            print('options')
+            
+        #Jouer :
+        if 410 <= curseur[0] <= 600 and 600 <= curseur[1] <= 660 :
+            self.attributs.mut_continuer(False)
     
     def boutons_partie(self) :
         pass
@@ -65,13 +78,15 @@ class Controle () :
             
             if evenement.type == pygame.MOUSEBUTTONDOWN :
                 
+                self.appuye = True
+                
                 if evenement.button == 1 :
                     self.boutons_menu()
+                    
+        self.appuye = False
         
         
         
-        
-    
     def partie(self, evenement) :
         
         if not self.quitter(evenement) :

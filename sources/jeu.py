@@ -27,7 +27,7 @@ class Jeu () :
         #Initialisation d'Attributs :
         self.attributs = attributs.Attributs()
         self.controle = controle.Controle(self.attributs)
-        self.affichage = affichage.Affichage(self.ecran, self.attributs)
+        self.affichage = affichage.Affichage(self.ecran, self.attributs, self.controle)
         
         self.partie = None
         
@@ -84,6 +84,6 @@ class Jeu () :
     def jouer(self) :
         pygame.init()
         pygame.display.set_caption('Ball Challenge')
-        #pygame.mouse.set_visible(False)
+        pygame.mouse.set_visible(False)
         #pygame.display.set_icon(pygame.image.load('medias/.png'))
         self.boucle()
