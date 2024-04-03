@@ -38,6 +38,9 @@ class Affichage () :
             'par_defaut' : pygame.image.load("ressources/fond_partie.png")
         }
         
+        self.barre_partie = pygame.image.load("ressources/barre_partie.png")
+        self.zone = pygame.image.load("ressources/zone.png")
+        
         self.boutons = {
             'jouer' : pygame.image.load("ressources/menu/jouer.png") ,
             'options' : pygame.image.load("ressources/menu/options.png"),
@@ -61,6 +64,8 @@ class Affichage () :
     
     def fond_partie(self) :
         self.ecran.blit(self.fonds['par_defaut'], (0, 0))
+        self.ecran.blit(self.barre_partie, (0, 668))
+        self.ecran.blit(self.zone, (100, 50))
         
     ### Boutons :
         

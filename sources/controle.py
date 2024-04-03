@@ -67,7 +67,7 @@ class Controle () :
     ######################################################
         
     def quitter(self, evenement) :
-        if evenement.type == pygame.QUIT or (evenement.type == pygame.KEYDOWN and evenement.key == pygame.K_ESCAPE) :
+        if evenement.type == pygame.QUIT :
             self.attributs.mut_continuer(False)
             return True
         return False
