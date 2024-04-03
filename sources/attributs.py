@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
--> ???
+-> Ball Challenge
 
 Auteur : AMEDRO Louis
 ''' 
@@ -20,11 +20,9 @@ class Attributs () :
     
     def __init__(self) :
         
-        #Boucle :
         self.continuer = True
-        
-        #Menu :
         self.menu = True
+        self.options = False
         
     ######################################################
     ### Accesseurs :
@@ -35,6 +33,9 @@ class Attributs () :
     
     def acc_menu(self):
         return self.menu
+    
+    def acc_options(self):
+        return self.options
     
     ######################################################
     ### Mutateurs :
@@ -47,3 +48,7 @@ class Attributs () :
     def mut_menu(self, valeur):
         assert isinstance(valeur, bool), 'Le paramètre doit être un booléen !'
         self.menu = valeur
+        
+    def mut_options(self, valeur):
+        assert isinstance(valeur, bool), 'Le paramètre doit être un booléen !'
+        self.options = valeur

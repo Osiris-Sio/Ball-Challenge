@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 '''
--> ???
+-> Ball Challenge
 
 Auteur : AMEDRO Louis
 ''' 
@@ -10,7 +10,7 @@ Auteur : AMEDRO Louis
 ### Importation Module :
 ######################################################
 
-import pygame, attributs
+import pygame, attributs, controle, affichage
 
 ######################################################
 ### Classe Jeu :
@@ -26,6 +26,10 @@ class Jeu () :
         
         #Initialisation d'Attributs :
         self.attributs = attributs.Attributs()
+        self.controle = controle.Controle(self.attributs)
+        self.affichage = affichage.Affichage(self.attributs)
+        
+        self.partie = None
         
     def boucle(self) :
         
@@ -34,10 +38,11 @@ class Jeu () :
             ### Menu :
             if self.attributs.acc_menu() :
                 
-                
+                for evenement in pygame.event.get() :
+                    self.controle.menu(evenement)
             
             
-            
+                self.affichage.menu()
             
             
             
@@ -47,18 +52,15 @@ class Jeu () :
             
             ### Partie :
             else :
-                pass
+                
+                for evenement in pygame.event.get() :
+                    self.controle.partie(evenement)
             
-        
+                self.affichage.partie()
         
         
         pygame.quit()
 
-
-
-
-
-        
     ######################################################
     ### Initialisation du Jeu et de la fenêtre :
     ######################################################
