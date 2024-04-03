@@ -21,7 +21,7 @@ class Jeu () :
     def __init__(self) :
         
         #Attributs Fenêtre :
-        self.ecran = pygame. display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.ecran = pygame. display.set_mode((1024, 768))
         self.horloge = pygame.time.Clock()
         
         #Initialisation d'Attributs :
@@ -84,6 +84,6 @@ class Jeu () :
     def jouer(self) :
         pygame.init()
         pygame.display.set_caption('Ball Challenge')
-        pygame.mouse.set_visible(False)
+        #pygame.mouse.set_visible(False)
         #pygame.display.set_icon(pygame.image.load('medias/.png'))
         self.boucle()

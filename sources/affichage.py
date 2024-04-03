@@ -24,22 +24,33 @@ class Affichage () :
         self.ecran = ecran
         self.attributs = les_attributs
         
-        #Fond :
-        self.fond = pygame.image.load("ressources/menu/test.png")
+        #Fonds :
+        self.fonds = {
+            'menu' : pygame.image.load("ressources/menu/fond.png"),
+            'par_defaut' : pygame.image.load("ressources/fond_partie.png")
+        }
+        
+        self.boutons = {
+            'jouer' : pygame.image.load("ressources/menu/jouer.png") 
+        }
     
     
     def fond_menu(self) :
-        self.ecran.blit(self.fond, (0, 0))
+        self.ecran.blit(self.fonds['menu'], (0, 0))
     
+    def boutons_menu(self) :
+        self.ecran.blit(self.boutons['jouer'], (400, 400))
     
-    
-    
+    def fond_partie(self) :
+        self.ecran.blit(self.fonds['par_defaut'], (0, 0))
     
     
     def menu(self) :
         self.fond_menu()
+        self.boutons_menu()
     
     
     
     def partie(self) :
-        pass
+        self.fond_partie()
+    
