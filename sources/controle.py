@@ -19,7 +19,7 @@ import pygame, attributs
 class Controle () :
     
     def __init__(self, les_attributs) :
-        assert isinstance(les_attributs, attributs.Attributs()), 'Le paramètre doit être de la classe Attributs !'
+        assert isinstance(les_attributs, attributs.Attributs), 'Le paramètre doit être de la classe Attributs !'
         
         self.attributs = les_attributs
         
@@ -43,7 +43,7 @@ class Controle () :
     ######################################################
         
     def quitter(self, evenement) :
-        if evenement.type == pygame.QUIT :
+        if evenement.type == pygame.QUIT or (evenement.type == pygame.KEYDOWN and evenement.key == pygame.K_ESCAPE) :
             self.attributs.mut_continuer(False)
             return True
         return False

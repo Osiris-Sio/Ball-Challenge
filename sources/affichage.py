@@ -10,7 +10,7 @@ Auteur : AMEDRO Louis
 ### Importation Module :
 ######################################################
 
-import pygame, attributs, controle
+import pygame, attributs, controle, jeu
 
 ######################################################
 ### Classe Jeu :
@@ -18,14 +18,18 @@ import pygame, attributs, controle
 
 class Affichage () :
     
-    def __init__(self, les_attributs) :
-        assert isinstance(les_attributs, attributs.Attributs()), 'Le paramètre doit être de la classe Attributs !'
+    def __init__(self, ecran, les_attributs) :
+        assert isinstance(les_attributs, attributs.Attributs), 'Le paramètre doit être de la classe Attributs !'
         
+        self.ecran = ecran
         self.attributs = les_attributs
+        
+        #Fond :
+        self.fond = pygame.image.load("ressources/menu/test.png")
     
     
     def fond_menu(self) :
-        pass
+        self.ecran.blit(self.fond, (0, 0))
     
     
     

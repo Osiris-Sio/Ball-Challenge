@@ -21,15 +21,27 @@ class Jeu () :
     def __init__(self) :
         
         #Attributs Fenêtre :
-        self.ecran = pygame.display.set_mode((1000, 600))
+        self.ecran = pygame. display.set_mode((0, 0), pygame.FULLSCREEN)
         self.horloge = pygame.time.Clock()
         
         #Initialisation d'Attributs :
         self.attributs = attributs.Attributs()
         self.controle = controle.Controle(self.attributs)
-        self.affichage = affichage.Affichage(self.attributs)
+        self.affichage = affichage.Affichage(self.ecran, self.attributs)
         
         self.partie = None
+        
+    ######################################################
+    ### Accesseurs :
+    ######################################################
+    
+    def acc_ecran(self) :
+        return self.ecran
+    
+    
+    ######################################################
+    ### Boucle :
+    ######################################################
         
     def boucle(self) :
         
@@ -60,7 +72,7 @@ class Jeu () :
                 
                 
             pygame.display.flip()
-            self.horloge().tick(60)
+            self.horloge.tick(60)
         
         
         pygame.quit()
@@ -71,7 +83,7 @@ class Jeu () :
         
     def jouer(self) :
         pygame.init()
-        pygame.display.set_caption('???') 
+        pygame.display.set_caption('Ball Challenge')
         pygame.mouse.set_visible(False)
         #pygame.display.set_icon(pygame.image.load('medias/.png'))
         self.boucle()
