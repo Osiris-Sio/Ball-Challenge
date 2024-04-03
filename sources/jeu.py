@@ -21,7 +21,7 @@ class Jeu () :
     def __init__(self) :
         
         #Attributs Fenêtre :
-        self.ecran = pygame.display.set_mode((1300, 800))
+        self.ecran = pygame.display.set_mode((1000, 600))
         self.horloge = pygame.time.Clock()
         
         #Initialisation d'Attributs :
@@ -41,7 +41,6 @@ class Jeu () :
                 for evenement in pygame.event.get() :
                     self.controle.menu(evenement)
             
-            
                 self.affichage.menu()
             
             
@@ -57,6 +56,11 @@ class Jeu () :
                     self.controle.partie(evenement)
             
                 self.affichage.partie()
+                
+                
+                
+            pygame.display.flip()
+            self.horloge().tick(60)
         
         
         pygame.quit()

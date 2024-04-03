@@ -24,6 +24,8 @@ class Affichage () :
         self.attributs = les_attributs
     
     
+    def fond_menu(self) :
+        pass
     
     
     
@@ -31,7 +33,7 @@ class Affichage () :
     
     
     def menu(self) :
-        pass
+        self.fond_menu()
     
     
     
