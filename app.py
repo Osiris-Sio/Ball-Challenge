@@ -24,8 +24,6 @@ class Personnage() :
         self.y = 20
         #Apparence :
         self.apparence = apparence
-        #Collisions :
-        self.tab_collisions = [(0, 0), (4, 0), (8, 0), (0, 4), (0, 8), (4, 4), (8, 4), (4, 8), (8, 8)]
         
     ###Accesseur :
     
@@ -34,23 +32,20 @@ class Personnage() :
     
     def acc_y(self):
         return self.y
-    
-    def acc_tab_collisions(self):
-        return self.tab_collisions
         
     ###Mouvements :
     
-    def gauche(self):
-        self.x -= 1
+    def gauche(self, vitesse = 1):
+        self.x -= vitesse
         
-    def droite(self):
-        self.x += 1
+    def droite(self, vitesse = 1):
+        self.x += vitesse
         
-    def haut(self):
-        self.y -= 1
+    def haut(self, vitesse = 1):
+        self.y -= vitesse
         
-    def bas(self):
-        self.y += 1
+    def bas(self, vitesse = 1):
+        self.y += vitesse
         
     ###Affichage :
     
@@ -71,8 +66,15 @@ class Piece() :
         self.x = x
         self.y = y
         
-    def collisions(self, x_perso, y_perso, tab_collisions_perso) :
-        return x_perso < self.x < x_perso + 8 and y_perso < self.y < y_perso + 8
+    def collisions(self, x_perso, y_perso) :
+        tab_collisions_piece = [(-1, -1), (0, -1), (1, -1), (-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1)]
+        i = 0
+        constat = False
+        while i < len(tab_collisions_piece) and not constat :
+            if x_perso < self.x + tab_collisions_piece[i][0] < x_perso + 8 and y_perso < self.y + tab_collisions_piece[i][1] < y_perso + 8:
+                constat = True
+            i += 1
+        return constat
     
     def afficher(self):
         pyxel.circ(self.x, self.y, 1, 10)
@@ -121,14 +123,18 @@ class Ball() :
             self.remplacer(random.choice([(-1, -1), (0, -1), (1, -1)]))
         self.rebonds_ball()
         
-    def collisions(self, x_perso, y_perso, tab_collisions_perso) :
-        constat = False
+    def collisions(self, x_perso, y_perso) :
+        tab_collisions_ball = [(-3, -3), (0, -3), (1, -3), (-3, 0), (0, 0), (3, 0), (-3, 3), (0, 3), (3, 3)]
         i = 0
-        while i < len(tab_collisions_perso) and not constat :
-            if self.x - 3 < x_perso + tab_collisions_perso[i][0] < self.x + 3 and self.y - 3 < y_perso + tab_collisions_perso[i][0] < self.y + 3 :
+        constat = False
+        while i < len(tab_collisions_piece) and not constat :
+            if x_perso < self.x + tab_collisions_ball[i][0] < x_perso + 8 and y_perso < self.y + tab_collisions_ball[i][1] < y_perso + 8:
                 constat = True
             i += 1
         return constat
+    
+    def afficher(self):
+        pyxel.circ(self.x, self.y, 1, 10)
     
     def afficher(self):
         pyxel.circ(self.x, self.y, 3, self.apparence)
@@ -200,17 +206,17 @@ class Jeu() :
     def controle_tactile(self):
         if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) :
             #Gauche :
-            if 168 <= pyxel.mouse_x <= 180 and 60 <= pyxel.mouse_y <= 92:
-                self.personnage.gauche()
+            if 168 <= pyxel.mouse_x <= 180 and 60 <= pyxel.mouse_y <= 92 and self.personnage.acc_x() > 0:
+                self.personnage.gauche(0.5)
             #Droite :
-            if 188 <= pyxel.mouse_x <= 200 and 60 <= pyxel.mouse_y <= 92:
-                self.personnage.droite()
+            if 188 <= pyxel.mouse_x <= 200 and 60 <= pyxel.mouse_y <= 92 and self.personnage.acc_x() < 192:
+                self.personnage.droite(0.5)
             #Haut :
-            if 168 <= pyxel.mouse_x <= 200 and 60 <= pyxel.mouse_y <= 72:
-                self.personnage.haut()
+            if 168 <= pyxel.mouse_x <= 200 and 60 <= pyxel.mouse_y <= 72 and self.personnage.acc_y() > 0:
+                self.personnage.haut(0.5)
             #Bas :
-            if 168 <= pyxel.mouse_x <= 200 and 78 <= pyxel.mouse_y <= 92  and self.personnage.acc_y() < 52:
-                self.personnage.bas()
+            if 168 <= pyxel.mouse_x <= 200 and 78 <= pyxel.mouse_y <= 92 and self.personnage.acc_y() < 52:
+                self.personnage.bas(0.5)
     
     def controle_personnage(self):
         if self.clavier :
@@ -224,7 +230,7 @@ class Jeu() :
             ball.rebonds()
             
     def prendre_piece(self):
-        if self.piece.collisions(self.personnage.acc_x(), self.personnage.acc_y(), self.personnage.acc_tab_collisions()) :
+        if self.piece.collisions(self.personnage.acc_x(), self.personnage.acc_y()) :
             self.piece = Piece(random.randint(5, 195), random.randint(5, 55))
             self.score += 1
             if self.score % 1 == 0 and self.score != 0:
@@ -234,7 +240,7 @@ class Jeu() :
     def est_fini(self):
         i = 0
         while i < len(self.tab_balls) and not self.fin_partie :
-            if self.tab_balls[i].collisions(self.personnage.acc_x(), self.personnage.acc_y(), self.personnage.acc_tab_collisions()) :
+            if self.tab_balls[i].collisions(self.personnage.acc_x(), self.personnage.acc_y()) :
                 self.fin_partie = True
             i += 1
         return self.fin_partie
