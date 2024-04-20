@@ -3,6 +3,7 @@
 '''
 -> Ball Challenge
 
+Studio : I.V.L Games (Innovation, Vision and Liberty Games)
 Auteur : AMEDRO Louis (alias Osiris Sio)
 ''' 
 
@@ -146,8 +147,13 @@ class Ball() :
 class Jeu() :
     
     def __init__(self) :
+        
+        #Intro :
+        self.intro = True
+        self.temps_commence_intro = time.time()
+        
         #Menu :
-        self.menu = True
+        self.menu = False
         self.clavier = True
         
         #Apparences :
@@ -166,11 +172,19 @@ class Jeu() :
         pyxel.init(200, 92, title='Ball Challenge', fps=60, capture_scale=3, capture_sec=0)
         pyxel.mouse(True)
         pyxel.load('ressources.pyxres')
+        pyxel.playm(0)
         pyxel.run(self.calculs, self.affichages)
     
     ######################################################
     ### Calculs :
     ######################################################
+    
+    ###Intro :
+    
+    def finir_intro(self):
+        if time.time() - self.temps_commence_intro >= 2 :
+            self.intro = False
+            self.menu = True
     
     ###Boutons :
     
@@ -248,8 +262,12 @@ class Jeu() :
        
     def calculs(self) :
         
+        ### Intro :
+        if self.intro :
+            self.finir_intro()
+        
         ### Menu :
-        if self.menu :
+        elif self.menu :
             self.boutons_menu()
         
         ### Partie :
@@ -265,6 +283,10 @@ class Jeu() :
     ### blt(x, y, img, u, v, w, h, [colkey])
     ### text(x, y, s, col)
     ######################################################
+    
+    def afficher_intro(self) :
+        pyxel.blt(84, 38, 0, 0, 56, 32, 16)
+        pyxel.text(100, 55, 'Studio', 7)
     
     def afficher_menu(self):
         #Textes :
@@ -307,8 +329,11 @@ class Jeu() :
         #Fond Noir :
         pyxel.cls(0)
         
+        if self.intro :
+            self.afficher_intro()
+        
         ### Menu :
-        if self.menu :
+        elif self.menu :
             self.afficher_menu()
             self.personnage.afficher()
         
