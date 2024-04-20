@@ -20,8 +20,8 @@ class Personnage() :
     
     def __init__(self, apparence):
         #Position :
-        self.x = 95
-        self.y = 20
+        self.x = 150
+        self.y = 30
         #Apparence :
         self.apparence = apparence
         
@@ -32,6 +32,12 @@ class Personnage() :
     
     def acc_y(self):
         return self.y
+    
+    ###Placement de la partie :
+    
+    def placer_correctement(self):
+        self.x = 96
+        self.y = 20
         
     ###Mouvements :
     
@@ -50,10 +56,7 @@ class Personnage() :
     ###Affichage :
     
     def afficher(self):
-        dic = {
-            0 : pyxel.blt(self.x, self.y, 1, 8, 24, 8, 8, 0)
-        }
-        dic[self.apparence]
+        pyxel.blt(self.x, self.y, 1, 0, 8 * self.apparence, 8, 8, 0)
         
 ######################################################
 ### Classe Pièce :
@@ -147,20 +150,22 @@ class Jeu() :
         self.menu = True
         self.clavier = True
         
-        #Casier :
-        self.personnage_apparence = 0
-        self.ball_apparence = 9
+        #Apparences :
+        self.personnage_apparence = 4
+        self.ball_apparence = 7
+        
+        #Personnage :
+        self.personnage = Personnage(self.personnage_apparence)
         
         #Partie :
         self.temps = 0
         self.score = 0
-        self.tab_balls = []
         self.fin_partie = False
         
         #Initialisation de la fenêtre Pyxel 41, 23 /:
         pyxel.init(200, 92, title='Ball Challenge', fps=60, capture_scale=3, capture_sec=0)
         pyxel.mouse(True)
-        pyxel.load('res.pyxres')
+        pyxel.load('ressources.pyxres')
         pyxel.run(self.calculs, self.affichages)
     
     ######################################################
@@ -171,22 +176,19 @@ class Jeu() :
     
     def boutons_menu(self):
         if pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT) :
-            #Zone des boutons Jouer/Casier :
-            if 65 <= pyxel.mouse_y <= 81 :
-                #Casier :
-                if 25 <= pyxel.mouse_x <= 73 :
-                    print('casier ouvert')
-                #Jouer :
-                elif 125 <= pyxel.mouse_x <= 173 :
-                    self.menu = False
-                    self.temps_commence = time.time()
-                    self.personnage = Personnage(self.personnage_apparence)
-                    self.piece = Piece(95, 35)
-                    self.tab_balls = [Ball(0.3, -1, 0, self.ball_apparence), Ball(0.3, 1, 0, self.ball_apparence)]
-            #Bouton Plateforme :
+            
+            #Jouer :
+            if 76 <= pyxel.mouse_x <= 124 and 65 <= pyxel.mouse_y <= 81:
+                self.menu = False
+                self.temps_commence = time.time()
+                self.personnage.placer_correctement()
+                self.tab_balls = [Ball(0.3, -1, 0, self.ball_apparence), Ball(0.3, 1, 0, self.ball_apparence)]
+                self.piece = Piece(95, 35)
+            
+            #Plateforme :
             if 179 <= pyxel.mouse_x <= 195 and 5 <= pyxel.mouse_y <= 21 :
                 self.clavier = not self.clavier
-                pyxel.mouse(self.clavier)
+                #pyxel.mouse(self.clavier)
                     
     ###Contrôles :
                     
@@ -203,16 +205,16 @@ class Jeu() :
     def controle_tactile(self):
         if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) :
             #Gauche :
-            if 168 <= pyxel.mouse_x <= 180 and 60 <= pyxel.mouse_y <= 92 and self.personnage.acc_x() > 0:
+            if 170 <= pyxel.mouse_x <= 180 and 72 <= pyxel.mouse_y <= 80 and self.personnage.acc_x() > 0:
                 self.personnage.gauche()
             #Droite :
-            if 190 <= pyxel.mouse_x <= 200 and 60 <= pyxel.mouse_y <= 92 and self.personnage.acc_x() < 192:
+            if 188 <= pyxel.mouse_x <= 198 and 72 <= pyxel.mouse_y <= 80 and self.personnage.acc_x() < 192:
                 self.personnage.droite()
             #Haut :
-            if 168 <= pyxel.mouse_x <= 200 and 60 <= pyxel.mouse_y <= 72 and self.personnage.acc_y() > 0:
+            if 180 <= pyxel.mouse_x <= 188 and 62 <= pyxel.mouse_y <= 72 and self.personnage.acc_y() > 0:
                 self.personnage.haut()
             #Bas :
-            if 168 <= pyxel.mouse_x <= 200 and 80 <= pyxel.mouse_y <= 92 and self.personnage.acc_y() < 52:
+            if 180 <= pyxel.mouse_x <= 188 and 80 <= pyxel.mouse_y <= 90 and self.personnage.acc_y() < 52:
                 self.personnage.bas()
     
     def controle_personnage(self):
@@ -266,18 +268,22 @@ class Jeu() :
     
     def afficher_menu(self):
         #Textes :
-        pyxel.rect(72, 18, 59, 9, 12)
-        pyxel.rectb(72, 18, 59, 9, 5)
-        pyxel.text(74, 20, 'Ball Challenge', 0)
-        #Boutons Jouer/Casier:
-        pyxel.blt(25, 65, 0, 0, 16, 48, 16)
-        pyxel.blt(125, 65, 0, 0, 0, 48, 16)
+        pyxel.rect(71, 18, 59, 9, 5)
+        pyxel.rectb(71, 18, 59, 9, 7)
+        pyxel.text(73, 20, 'Ball Challenge', 7)
+        
+        #Ball :
+        pyxel.circ(30, 30, 3, self.ball_apparence)
+        
+        #Boutons Jouer:
+        pyxel.blt(76, 65, 0, 0, 0, 48, 16)
+        
         #Bouton Plateforme :
         dic = {
             True : 0,
             False : 16
         }
-        pyxel.blt(179, 5, 0, dic[self.clavier], 32, 16, 16)
+        pyxel.blt(179, 5, 0, dic[self.clavier], 16, 16, 16)
         
     def afficher_partie(self):      
         #Information :
@@ -288,7 +294,7 @@ class Jeu() :
         
         #Tactile :
         if not self.clavier :
-            pyxel.blt(172, 64, 0, 0, 48, 24, 24, 0)
+            pyxel.blt(172, 64, 0, 0, 32, 24, 24, 0)
             
     def afficher_balls(self):
         for ball in self.tab_balls :
@@ -300,10 +306,11 @@ class Jeu() :
     def affichages(self):
         #Fond Noir :
         pyxel.cls(0)
-        pyxel.images[0].load(0, 0, "title.png")
+        
         ### Menu :
         if self.menu :
             self.afficher_menu()
+            self.personnage.afficher()
         
         ### Partie :
         else :
@@ -315,4 +322,4 @@ class Jeu() :
             else :
                 self.afficher_fin()
                 
-Jeu()
+Jeu() #Lancement du jeu automatiquement
