@@ -96,10 +96,10 @@ class Piece() :
         pyxel.circ(self.x, self.y, 1, 10)
         
 ######################################################
-### Classe Ball :
+### Classe balle :
 ######################################################
 
-class Ball() :
+class balle() :
     
     def __init__(self, vitesse, dx, dy, apparence):
         #Position :
@@ -130,11 +130,11 @@ class Ball() :
     ###Rebonds :
     
     def collisions(self, x_elt, y_elt) :
-        tab_collisions_ball = [(-3, -3), (0, -3), (1, -3), (-3, 0), (0, 0), (3, 0), (-3, 3), (0, 3), (3, 3)]
+        tab_collisions_balle = [(-3, -3), (0, -3), (1, -3), (-3, 0), (0, 0), (3, 0), (-3, 3), (0, 3), (3, 3)]
         i = 0
         constat = False
-        while i < len(tab_collisions_ball) and not constat :
-            if x_elt < self.x + tab_collisions_ball[i][0] < x_elt + 8 and y_elt < self.y + tab_collisions_ball[i][1] < y_elt + 8:
+        while i < len(tab_collisions_balle) and not constat :
+            if x_elt < self.x + tab_collisions_balle[i][0] < x_elt + 8 and y_elt < self.y + tab_collisions_balle[i][1] < y_elt + 8:
                 constat = True
             i += 1
         return constat
@@ -174,7 +174,7 @@ class Jeu() :
         self.clavier = True
         
         #Apparence :
-        self.ball_apparence = 1
+        self.balle_apparence = 1
         
         #Personnage :
         self.personnage = Personnage()
@@ -184,7 +184,7 @@ class Jeu() :
         self.score = 0
         self.fin_partie = False
         
-        #Initialisation de la fenêtre Pyxel 41, 23 /:
+        #Initialisation de la fenêtre Pyxel:
         pyxel.init(200, 92, title='Ball Challenge', fps=60, capture_scale=3, capture_sec=0)
         pyxel.mouse(True)
         pyxel.load('ressources.pyxres')
@@ -212,7 +212,7 @@ class Jeu() :
                 self.menu = False
                 self.temps_commence = time.time()
                 self.personnage.placer_partie()
-                self.tab_balls = [Ball(0.3, -1, 0, self.ball_apparence), Ball(0.3, 1, 0, self.ball_apparence)]
+                self.tab_balles = [balle(0.3, -1, 0, self.balle_apparence), balle(0.3, 1, 0, self.balle_apparence)]
                 self.piece = Piece(100, 35)
             
             #Plateforme :
@@ -223,13 +223,13 @@ class Jeu() :
             #Zones Flèches :
             elif 55 <= pyxel.mouse_y <= 63 :
                 
-                #Gauche Ball :
-                if 18 <= pyxel.mouse_x <= 26 and 1 < self.ball_apparence :
-                    self.ball_apparence -= 1
+                #Gauche balle :
+                if 18 <= pyxel.mouse_x <= 26 and 1 < self.balle_apparence :
+                    self.balle_apparence -= 1
                 
-                #Droite Ball :
-                elif 34 <= pyxel.mouse_x <= 42 and self.ball_apparence < 15 :
-                    self.ball_apparence += 1
+                #Droite balle :
+                elif 34 <= pyxel.mouse_x <= 42 and self.balle_apparence < 15 :
+                    self.balle_apparence += 1
                                     
                 #Gauche Personnage :
                 elif 152 <= pyxel.mouse_x <= 160 and 0 < self.personnage.acc_apparence() :
@@ -242,7 +242,7 @@ class Jeu() :
     def bouton_retour(self):
         if pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT) :
             if 10 <= pyxel.mouse_x <= 58 and 69 <= pyxel.mouse_y <= 85 :
-                self.tab_balls = []
+                self.tab_balles = []
                 self.personnage.placer_menu()
                 self.score = 0
                 self.menu = True
@@ -281,12 +281,12 @@ class Jeu() :
         else :
             self.controle_tactile()
          
-    ###Balls :
+    ###Balles :
             
-    def actions_balls(self):
-        for ball in self.tab_balls :
-            ball.deplacer()
-            ball.rebonds()
+    def actions_balles(self):
+        for balle in self.tab_balles :
+            balle.deplacer()
+            balle.rebonds()
             
     ###Pièces :
             
@@ -296,15 +296,15 @@ class Jeu() :
             self.piece = Piece(random.randint(5, 195), random.randint(5, 55))
             self.score += 1
             if self.score % 1 == 0 and self.score != 0:
-                for ball in self.tab_balls:
-                    ball.vitesse += 0.02
+                for balle in self.tab_balles:
+                    balle.vitesse += 0.02
             
     ###Fin de partie :
         
     def est_fini(self):
         i = 0
-        while i < len(self.tab_balls) and not self.fin_partie :
-            if self.tab_balls[i].collisions(self.personnage.acc_x(), self.personnage.acc_y()) :
+        while i < len(self.tab_balles) and not self.fin_partie :
+            if self.tab_balles[i].collisions(self.personnage.acc_x(), self.personnage.acc_y()) :
                 self.fin_partie = True
                 pyxel.play(0, 3)
             i += 1
@@ -326,7 +326,7 @@ class Jeu() :
         else :
             if not self.est_fini() :
                 self.controle_personnage()
-                self.actions_balls()
+                self.actions_balles()
                 self.prendre_piece()
                 self.temps = int(time.time() - self.temps_commence)
             self.bouton_retour()
@@ -348,18 +348,18 @@ class Jeu() :
         pyxel.rectb(71, 18, 59, 9, 7)
         pyxel.text(73, 20, 'Ball Challenge', 7)
         
-        #Ball :
-        pyxel.circ(30, 40, 3, self.ball_apparence)
+        #balle :
+        pyxel.circ(30, 40, 3, self.balle_apparence)
         
-        ###Boutons Ball :
+        ###Boutons balle :
         #Gauche :
-        if 1 < self.ball_apparence :
+        if 1 < self.balle_apparence :
             pyxel.blt(18, 55, 0, 0, 48, 8, 8)
         else :
             pyxel.blt(18, 55, 0, 16, 48, 8, 8)
         
-        #Droite Ball :
-        if self.ball_apparence < 15 :
+        #Droite balle :
+        if self.balle_apparence < 15 :
             pyxel.blt(34, 55, 0, 8, 48, 8, 8)
         else :
             pyxel.blt(34, 55, 0, 24, 48, 8, 8)
@@ -403,9 +403,9 @@ class Jeu() :
         else :
             pyxel.blt(136, 60, 0, 0, 72, 48, 32, 0)
           
-    def afficher_balls(self):
-        for ball in self.tab_balls :
-            ball.afficher()
+    def afficher_balles(self):
+        for balle in self.tab_balles :
+            balle.afficher()
                 
     def afficher_fin(self):
         pyxel.text(78, 18, 'Partie\n  Terminee', 7)
@@ -428,7 +428,7 @@ class Jeu() :
             if not self.fin_partie :
                 self.piece.afficher()
                 self.personnage.afficher()
-                self.afficher_balls()
+                self.afficher_balles()
             else :
                 self.afficher_fin()
                 
