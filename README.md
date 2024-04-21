@@ -1,6 +1,6 @@
 # Jouer
 
-[Clique ici !](https://osiris-sio.github.io/HTML_Ball-Challenge/)
+[Clique ici](https://osiris-sio.github.io/HTML_Ball-Challenge/) pour jouer sur le navigateur, que tu sois sur PC ou Smartphone !
 
 # Description 
 
