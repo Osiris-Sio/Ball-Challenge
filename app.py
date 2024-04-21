@@ -218,7 +218,7 @@ class Jeu() :
             #Plateforme :
             elif 179 <= pyxel.mouse_x <= 195 and 5 <= pyxel.mouse_y <= 21 :
                 self.clavier = not self.clavier
-                #pyxel.mouse(self.clavier)
+                pyxel.mouse(self.clavier)
                 
             #Zones Flèches :
             elif 55 <= pyxel.mouse_y <= 63 :
@@ -250,34 +250,34 @@ class Jeu() :
                     
     ###Contrôles :
                     
-    def controle_clavier(self):
-        if pyxel.btn(pyxel.KEY_Q) and self.personnage.acc_x() > 0:
+    def controle_clavier_manette(self):
+        if (pyxel.btn(pyxel.KEY_Q) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT)) and self.personnage.acc_x() > 0:
             self.personnage.gauche()
-        if pyxel.btn(pyxel.KEY_D) and self.personnage.acc_x() < 192 :
+        if (pyxel.btn(pyxel.KEY_D) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT)) and self.personnage.acc_x() < 192 :
             self.personnage.droite()
-        if pyxel.btn(pyxel.KEY_Z) and self.personnage.acc_y() > 0:
+        if (pyxel.btn(pyxel.KEY_Z) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_UP)) and self.personnage.acc_y() > 0:
             self.personnage.haut()
-        if pyxel.btn(pyxel.KEY_S) and self.personnage.acc_y() < 52 :
+        if (pyxel.btn(pyxel.KEY_S) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN)) and self.personnage.acc_y() < 52 :
             self.personnage.bas()
         
     def controle_tactile(self):
         if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT) :
             #Gauche :
-            if 170 <= pyxel.mouse_x <= 180 and 72 <= pyxel.mouse_y <= 80 and self.personnage.acc_x() > 0:
+            if 136 <= pyxel.mouse_x <= 152 and 76 <= pyxel.mouse_y <= 92 and self.personnage.acc_x() > 0:
                 self.personnage.gauche()
             #Droite :
-            if 188 <= pyxel.mouse_x <= 198 and 72 <= pyxel.mouse_y <= 80 and self.personnage.acc_x() < 192:
+            if 168 <= pyxel.mouse_x <= 184 and 76 <= pyxel.mouse_y <= 92 and self.personnage.acc_x() < 192:
                 self.personnage.droite()
             #Haut :
-            if 180 <= pyxel.mouse_x <= 188 and 62 <= pyxel.mouse_y <= 72 and self.personnage.acc_y() > 0:
+            if 152 <= pyxel.mouse_x <= 168 and 60 <= pyxel.mouse_y <= 76 and self.personnage.acc_y() > 0:
                 self.personnage.haut()
             #Bas :
-            if 180 <= pyxel.mouse_x <= 188 and 80 <= pyxel.mouse_y <= 90 and self.personnage.acc_y() < 52:
+            if 152 <= pyxel.mouse_x <= 168 and 76 <= pyxel.mouse_y <= 92 and self.personnage.acc_y() < 52:
                 self.personnage.bas()
     
     def controle_personnage(self):
         if self.clavier :
-            self.controle_clavier()
+            self.controle_clavier_manette()
         else :
             self.controle_tactile()
          
@@ -341,7 +341,7 @@ class Jeu() :
     
     def afficher_menu(self):
         #Version :
-        pyxel.text(2, 85, '0.0.1', 7)
+        pyxel.text(2, 85, '0.0.3', 7)
         
         #Titre :
         pyxel.rect(71, 18, 59, 9, 5)
@@ -350,12 +350,32 @@ class Jeu() :
         
         #Ball :
         pyxel.circ(30, 40, 3, self.ball_apparence)
-        pyxel.blt(18, 55, 0, 0, 72, 8, 8)
-        pyxel.blt(34, 55, 0, 8, 72, 8, 8) 
         
-        #Boutons Personnage :
-        pyxel.blt(152, 55, 0, 0, 72, 8, 8)
-        pyxel.blt(168, 55, 0, 8, 72, 8, 8) 
+        ###Boutons Ball :
+        #Gauche :
+        if 1 < self.ball_apparence :
+            pyxel.blt(18, 55, 0, 0, 48, 8, 8)
+        else :
+            pyxel.blt(18, 55, 0, 16, 48, 8, 8)
+        
+        #Droite Ball :
+        if self.ball_apparence < 15 :
+            pyxel.blt(34, 55, 0, 8, 48, 8, 8)
+        else :
+            pyxel.blt(34, 55, 0, 24, 48, 8, 8)
+        
+        ###Boutons Personnage :
+        #Gauche :
+        if 0 < self.personnage.acc_apparence() :
+            pyxel.blt(152, 55, 0, 0, 48, 8, 8)
+        else :
+            pyxel.blt(152, 55, 0, 16, 48, 8, 8)
+        
+        #Droite :
+        if self.personnage.acc_apparence() < 7 :
+            pyxel.blt(168, 55, 0, 8, 48, 8, 8)
+        else :
+            pyxel.blt(168, 55, 0, 24, 48, 8, 8)
         
         #Boutons Jouer:
         pyxel.blt(76, 65, 0, 0, 0, 48, 16)
@@ -375,11 +395,13 @@ class Jeu() :
         pyxel.text(80, 70, 'Score : ' + str(self.score), 7)
         
         #Bouton Retour :
-        pyxel.blt(10, 69, 0, 0, 80, 48, 16)
+        pyxel.blt(10, 69, 0, 0, 32, 48, 16)
         
-        #Tactile :
-        if not self.clavier :
-            pyxel.blt(172, 64, 0, 0, 32, 24, 24, 0)
+        #Touche :
+        if self.clavier :
+            pyxel.blt(136, 60, 0, 0, 104, 48, 32, 0)
+        else :
+            pyxel.blt(136, 60, 0, 0, 72, 48, 32, 0)
           
     def afficher_balls(self):
         for ball in self.tab_balls :
