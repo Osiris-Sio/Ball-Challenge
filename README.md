@@ -19,8 +19,24 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 <img src="res/menu.png" style="zoom: 50%;"/>
 
 1. Changer la couleur de la balle (15 couleurs)
-2. Changer le personnage ()
+2. Changer le personnage (8 personnages)
+3. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile.
+4. Bouton pour lancer une partie.
+5. La version du jeu.
 
----
+# Partie
 
-__Auteur :__ AMEDRO Louis (alias Osiris Sio)
+<img src="res/partie.png" style="zoom: 50%;"/>
+
+1. Votre personnage (8x8 pixels).
+2. Une pièce qui doit être ramassée pour augmenter le score.
+3. La balle qu'il faut éviter. Attention, elles rebondissent aléatoirement sur les murs.
+4. Indication des touches à appuyer pour bouger votre personnage.
+5. Les informations de la partie. Cette zone indique le nombre de pièces ramassées et la durée (en secondes) de la partie.
+6. Bouton pour retourner au menu.
+
+________
+
+Par AMEDRO Louis (alias Osiris Sio)
+
+licence CC BY SA
