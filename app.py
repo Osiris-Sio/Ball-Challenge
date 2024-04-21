@@ -113,6 +113,14 @@ class Ball() :
         #Apparence :
         self.apparence = apparence
         
+    ###Accesseur :
+    
+    def acc_x(self):
+        return self.x
+    
+    def acc_y(self):
+        return self.y
+        
     ###Déplacement :
     
     def deplacer(self):
@@ -121,13 +129,20 @@ class Ball() :
     
     ###Rebonds :
     
+    def collisions(self, x_elt, y_elt) :
+        tab_collisions_ball = [(-3, -3), (0, -3), (1, -3), (-3, 0), (0, 0), (3, 0), (-3, 3), (0, 3), (3, 3)]
+        i = 0
+        constat = False
+        while i < len(tab_collisions_ball) and not constat :
+            if x_elt < self.x + tab_collisions_ball[i][0] < x_elt + 8 and y_elt < self.y + tab_collisions_ball[i][1] < y_elt + 8:
+                constat = True
+            i += 1
+        return constat
+    
     def remplacer(self, tuple_dx_dy):
         self.dx = tuple_dx_dy[0] * self.vitesse
         self.dy = tuple_dx_dy[1] * self.vitesse
         pyxel.play(1, 1)
-        
-    def rebonds_ball(self):
-        pass
         
     def rebonds(self):
         if self.x - 4 < 0 :
@@ -138,19 +153,7 @@ class Ball() :
             self.remplacer(random.choice([(-1, 1), (0, 1), (1, 1)]))
         if self.y + 4 > 60 :
             self.remplacer(random.choice([(-1, -1), (0, -1), (1, -1)]))
-        self.rebonds_ball()
-        
-        
-    def collisions(self, x_perso, y_perso) :
-        tab_collisions_ball = [(-3, -3), (0, -3), (1, -3), (-3, 0), (0, 0), (3, 0), (-3, 3), (0, 3), (3, 3)]
-        i = 0
-        constat = False
-        while i < len(tab_collisions_ball) and not constat :
-            if x_perso < self.x + tab_collisions_ball[i][0] < x_perso + 8 and y_perso < self.y + tab_collisions_ball[i][1] < y_perso + 8:
-                constat = True
-            i += 1
-        return constat
-    
+            
     def afficher(self):
         pyxel.circ(self.x, self.y, 3, self.apparence)
 
@@ -241,6 +244,7 @@ class Jeu() :
             if 10 <= pyxel.mouse_x <= 58 and 69 <= pyxel.mouse_y <= 85 :
                 self.tab_balls = []
                 self.personnage.placer_menu()
+                self.score = 0
                 self.menu = True
                 self.fin_partie = False
                     
