@@ -5,6 +5,8 @@
 
 Studio : I.V.L Games (Innovation, Vision and Liberty Games)
 Auteur : AMEDRO Louis (alias Osiris Sio)
+
+licence CC BY SA
 ''' 
 
 ######################################################

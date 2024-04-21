@@ -38,5 +38,6 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 ________
 
 Par AMEDRO Louis (alias Osiris Sio)
+Studio : I.V.L Games (Innovation, Vision and Liberty Games)
 
 licence CC BY SA
