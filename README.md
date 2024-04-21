@@ -1,6 +1,7 @@
 # Jouer
 
-[Clique ici](https://osiris-sio.github.io/HTML_Ball-Challenge/) pour jouer sur le navigateur, que tu sois sur PC ou Smartphone !
+[Clique ici](https://osiris-sio.github.io/HTML_Ball-Challenge/) pour jouer sur le navigateur, que vous soyez sur PC ou Smartphone !
+Vous pouvez également jouer hors ligne en installant game.html sur PC et Smartphone.
 
 # Description 
 
