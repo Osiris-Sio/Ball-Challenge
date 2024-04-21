@@ -12,11 +12,11 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 
 <img src="res/balle.png" /> <img src="res/crabe.png" />
 
-* Esquivez les balles: Utilisez votre réflexe et votre rapidité pour éviter les balles qui rebondissent sur les murs.
-* Collectez des pièces: Ramassez le plus de pièces pour accumuler des points.
-* Défiez-vous: Testez vos compétences en tentant d'obtenir le meilleur score possible dans ce jeu rapide et stimulant.
-* Graphismes rétro: Plongez dans une esthétique rétro avec des visuels charmants.
-* Facile à jouer, difficile à maîtriser: Accessible à tous, mais assez difficile pour défier même les joueurs les plus expérimentés.
+* Esquivez les balles : Utilisez votre réflexe et votre rapidité pour éviter les balles qui rebondissent sur les murs.
+* Collectez des pièces : Ramassez le plus de pièces pour accumuler des points.
+* Défiez-vous : Testez vos compétences en tentant d'obtenir le meilleur score possible dans ce jeu rapide et stimulant.
+* Graphismes rétro : Plongez dans une esthétique rétro avec des visuels charmants.
+* Facile à jouer, difficile à maîtriser : Accessible à tous, mais assez difficile pour défier même les joueurs les plus expérimentés.
 
 # Menu
 
