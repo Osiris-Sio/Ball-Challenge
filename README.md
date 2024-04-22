@@ -27,7 +27,7 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 2. Changer le personnage (8 personnages)
 3. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile.
 4. Bouton pour lancer une partie.
-5. La version du jeu.
+5. La version du jeu. Les mises à jour ne seront que esthétiques (exemple : ajout de personnages)
 
 # Partie
 
@@ -39,6 +39,12 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 4. Indication des touches à appuyer pour bouger votre personnage.
 5. Les informations de la partie. Cette zone indique le nombre de pièces ramassées et la durée (en secondes) de la partie.
 6. Bouton pour retourner au menu.
+
+_Remarque :_
+
+<img src="res/tactile.png" style="zoom: 50%;"/>
+
+Pour le mode "Smartphone", l'indication des touches changera en une croix directionnelle tactile.
 
 ________
 
