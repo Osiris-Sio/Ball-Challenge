@@ -46,6 +46,13 @@ _Remarque :_
 
 Pour le mode "Smartphone", l'indication des touches changera en une croix directionnelle tactile.
 
+# Réseaux Sociaux
+
+* Discord : osirissio
+* [Twitter (X)](https://twitter.com/OsirisSio)
+* [TikTok](https://www.tiktok.com/@osirissio)
+* [Itch.io](https://itch.io/profile/osiris-sio)
+
 ________
 
 Par AMEDRO Louis (alias Osiris Sio)
