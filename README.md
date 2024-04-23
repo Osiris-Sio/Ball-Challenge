@@ -25,7 +25,8 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 
 1. Changer la couleur de la balle (15 couleurs)
 2. Changer le personnage (8 personnages)
-3. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile.
+3. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile. 
+En mode PC, la croix directionnelle d'une manette est prise en compte.
 4. Bouton pour lancer une partie.
 5. La version du jeu. Les mises à jour ne seront que esthétiques (exemple : ajout de personnages)
 
@@ -48,7 +49,7 @@ Pour le mode "Smartphone", l'indication des touches changera en une croix direct
 
 # Réseaux Sociaux
 
-* Discord : osirissio
+* Discord : osiris_sio
 * [Twitter (X)](https://twitter.com/OsirisSio)
 * [TikTok](https://www.tiktok.com/@osirissio)
 * [Itch.io](https://itch.io/profile/osiris-sio)

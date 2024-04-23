@@ -238,7 +238,7 @@ class Jeu() :
                     self.personnage.changement_apparence(-1)
                 
                 #Droite Personnage :
-                elif 168 <= pyxel.mouse_x <= 176 and self.personnage.acc_apparence() < 7 :
+                elif 168 <= pyxel.mouse_x <= 176 and self.personnage.acc_apparence() < 11 :
                     self.personnage.changement_apparence(1)
     
     def bouton_retour(self):
@@ -343,7 +343,7 @@ class Jeu() :
     
     def afficher_menu(self):
         #Version :
-        pyxel.text(2, 85, '0.0.3', 7)
+        pyxel.text(2, 85, '0.0.4', 7)
         
         #Titre :
         pyxel.rect(71, 18, 59, 9, 5)
@@ -374,7 +374,7 @@ class Jeu() :
             pyxel.blt(152, 55, 0, 16, 48, 8, 8)
         
         #Droite :
-        if self.personnage.acc_apparence() < 7 :
+        if self.personnage.acc_apparence() < 11 :
             pyxel.blt(168, 55, 0, 8, 48, 8, 8)
         else :
             pyxel.blt(168, 55, 0, 24, 48, 8, 8)
