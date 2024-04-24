@@ -24,7 +24,7 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 <img src="res/menu.png" style="zoom: 50%;"/>
 
 1. Changer la couleur de la balle (15 couleurs)
-2. Changer le personnage (8 personnages)
+2. Changer le personnage (12 personnages)
 3. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile. 
 En mode PC, la croix directionnelle d'une manette est prise en compte.
 4. Bouton pour lancer une partie.
