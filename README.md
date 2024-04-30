@@ -49,10 +49,7 @@ Pour le mode "Smartphone", l'indication des touches changera en une croix direct
 
 # Réseaux Sociaux
 
-* Discord : osiris_sio
-* [Twitter (X)](https://twitter.com/OsirisSio)
-* [TikTok](https://www.tiktok.com/@osirissio)
-* [Itch.io](https://itch.io/profile/osiris-sio)
+[Réseaux sociaux 🌍](https://linktr.ee/osiris_sio)
 
 ________
 
