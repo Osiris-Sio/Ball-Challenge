@@ -101,7 +101,7 @@ class Piece() :
 ### Classe balle :
 ######################################################
 
-class balle() :
+class Balle() :
     
     def __init__(self, vitesse, dx, dy, apparence):
         #Position :
@@ -214,7 +214,7 @@ class Jeu() :
                 self.menu = False
                 self.temps_commence = time.time()
                 self.personnage.placer_partie()
-                self.tab_balles = [balle(0.3, -1, 0, self.balle_apparence), balle(0.3, 1, 0, self.balle_apparence)]
+                self.tab_balles = [Balle(0.3, -1, 0, self.balle_apparence), Balle(0.3, 1, 0, self.balle_apparence)]
                 self.piece = Piece(100, 35)
             
             #Plateforme :
