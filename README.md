@@ -23,12 +23,13 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 
 <img src="res/menu.png" style="zoom: 50%;"/>
 
-1. Changer la couleur de la balle (15 couleurs)
-2. Changer le personnage (12 personnages)
-3. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile. 
+1. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile. 
 En mode PC, la croix directionnelle d'une manette est prise en compte.
-4. Bouton pour lancer une partie.
-5. La version du jeu. Les mises à jour ne seront que esthétiques (exemple : ajout de personnages)
+2. Changer le nombre de balles pendant la partie. (1, 2 ou 3 balles)
+3. Changer la couleur de la balle ou des balles (15 couleurs)
+4. Changer le personnage (12 personnages)
+5. Bouton pour lancer une partie.
+6. La version du jeu.
 
 # Partie
 
@@ -37,9 +38,10 @@ En mode PC, la croix directionnelle d'une manette est prise en compte.
 1. Votre personnage (8x8 pixels).
 2. Une pièce qui doit être ramassée pour augmenter le score.
 3. La balle qu'il faut éviter. Attention, elles rebondissent aléatoirement sur les murs.
-4. Indication des touches à appuyer pour bouger votre personnage.
-5. Les informations de la partie. Cette zone indique le nombre de pièces ramassées et la durée (en secondes) de la partie.
-6. Bouton pour retourner au menu.
+4. Bouton pour retourner au menu.
+5. Bouton pour relancer la partie.
+6. Les informations de la partie. Cette zone indique le nombre de balles, le nombre de pièces ramassées et la durée (en secondes) de la partie.
+7. Indication des touches à appuyer pour bouger votre personnage.
 
 _Remarque :_
 
