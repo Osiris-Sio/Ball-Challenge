@@ -49,7 +49,7 @@ _Remarque :_
 
 Pour le mode "Smartphone", l'indication des touches changera en une croix directionnelle tactile.
 
-# Réseaux Sociaux
+# Pour en savoir plus :
 
 [Réseaux sociaux 🌍](https://linktr.ee/osiris_sio)
 
