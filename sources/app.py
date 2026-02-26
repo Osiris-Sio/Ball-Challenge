@@ -534,15 +534,34 @@ class Jeu:
                 elif 34 <= mx <= 42 and self.nombre_balles < 5:
                      self.nombre_balles += 1
 
+    def controle_clavier_manette(self):
+        if (pyxel.btn(pyxel.KEY_Q) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT)): self.personnage.gauche()
+        if (pyxel.btn(pyxel.KEY_D) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT)): self.personnage.droite()
+        if (pyxel.btn(pyxel.KEY_Z) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_UP)): self.personnage.haut()
+        if (pyxel.btn(pyxel.KEY_S) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN)): self.personnage.bas()
+
+    def controle_tactile(self):
+        if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
+            mx, my = pyxel.mouse_x, pyxel.mouse_y
+            # Gauche :
+            if 136 <= mx <= 152 and 76 <= my <= 92:
+                self.personnage.gauche()
+            # Droite :
+            if 168 <= mx <= 184 and 76 <= my <= 92:
+                self.personnage.droite()
+            # Haut :
+            if 152 <= mx <= 168 and 60 <= my <= 76:
+                self.personnage.haut()
+            # Bas :
+            if 152 <= mx <= 168 and 76 <= my <= 92:
+                self.personnage.bas()
+
     def gestion_jeu(self):
         # Contrôles
         if self.clavier:
-            if (pyxel.btn(pyxel.KEY_Q) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_LEFT)): self.personnage.gauche()
-            if (pyxel.btn(pyxel.KEY_D) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_RIGHT)): self.personnage.droite()
-            if (pyxel.btn(pyxel.KEY_Z) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_UP)): self.personnage.haut()
-            if (pyxel.btn(pyxel.KEY_S) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN)): self.personnage.bas()
+            self.controle_clavier_manette()
         else:
-            mx, my = pyxel.mouse_x, pyxel.mouse_y
+            self.controle_tactile()
         # Mise à jour des timers perso
         if self.personnage.invincible > 0: self.personnage.invincible -= 1
         px, py = self.personnage.x, self.personnage.y
