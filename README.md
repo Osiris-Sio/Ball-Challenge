@@ -2,7 +2,7 @@
 
 [Clique ici](https://osiris-sio.itch.io/ball-challenge) pour jouer sur le navigateur, que vous soyez sur PC ou Smartphone !
 
-# Description 
+# Description
 
 <img src="res/titre.png" />
 
@@ -12,18 +12,18 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 
 <img src="res/balle.png" /> <img src="res/crabe.png" />
 
-* Esquivez les balles : Utilisez votre réflexe et votre rapidité pour éviter les balles qui rebondissent sur les murs.
-* Collectez des pièces : Ramassez le plus de pièces pour accumuler des points.
-* Défiez-vous : Testez vos compétences en tentant d'obtenir le meilleur score possible dans ce jeu rapide et stimulant.
-* Graphismes rétro : Plongez dans une esthétique rétro avec des visuels charmants.
-* Facile à jouer, difficile à maîtriser : Accessible à tous, mais assez difficile pour défier même les joueurs les plus expérimentés.
+- Esquivez les balles : Utilisez votre réflexe et votre rapidité pour éviter les balles qui rebondissent sur les murs.
+- Collectez des pièces : Ramassez le plus de pièces pour accumuler des points.
+- Défiez-vous : Testez vos compétences en tentant d'obtenir le meilleur score possible dans ce jeu rapide et stimulant.
+- Graphismes rétro : Plongez dans une esthétique rétro avec des visuels charmants.
+- Facile à jouer, difficile à maîtriser : Accessible à tous, mais assez difficile pour défier même les joueurs les plus expérimentés.
 
 # Menu
 
 <img src="res/menu.png" style="zoom: 50%;"/>
 
-1. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile. 
-En mode PC, la croix directionnelle d'une manette est prise en compte.
+1. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile.
+   En mode PC, la croix directionnelle d'une manette est prise en compte.
 2. Changer le nombre de balles pendant la partie. (1, 2 ou 3 balles)
 3. Changer la couleur de la balle ou des balles (15 couleurs)
 4. Changer le personnage (12 personnages)
@@ -50,12 +50,12 @@ Pour le mode "Smartphone", l'indication des touches changera en une croix direct
 
 # Pour en savoir plus :
 
-[Réseaux sociaux 🌍](https://linktr.ee/osiris_sio)
+[Site Officiel 🌍](https://osiris-sio.fr)
 
-________
+---
 
 Par AMEDRO Louis (alias Osiris Sio)
 
-Studio : I.V.L Games (Innovation, Vision and Liberty Games)
+Studio : Osiris Games
 
 licence CC BY SA
