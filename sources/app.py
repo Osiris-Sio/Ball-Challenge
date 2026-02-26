@@ -82,6 +82,7 @@ class Particule:
         self.dy = dy
         self.vie = vie
         self.vie_max = vie
+        self.seuil_fade = vie // 2
         self.couleur = couleur
         self.mode = mode # "pixel" ou "ligne"
 
@@ -89,15 +90,18 @@ class Particule:
         self.x += self.dx
         self.y += self.dy
         self.vie -= 1
+        return self.vie > 0
 
     def dessiner(self):
+        # Fade simple selon la vie pour plus de douceur
+        col = self.couleur
+        if self.vie < self.seuil_fade:
+            if col == COL_BLANC: col = COL_GRIS
+            
         if self.mode == "ligne":
-            # Dessine une petite traînée
-            queue_x = self.x - self.dx 
-            queue_y = self.y - self.dy
-            pyxel.line(self.x, self.y, queue_x, queue_y, self.couleur)
+            pyxel.line(self.x, self.y, self.x - self.dx, self.y - self.dy, col)
         else:
-            pyxel.pset(self.x, self.y, self.couleur)
+            pyxel.pset(self.x, self.y, col)
 
 class GestionnaireParticules:
     def __init__(self):
@@ -106,9 +110,9 @@ class GestionnaireParticules:
     def ajouter_effet_air(self, x, y, direction, est_balle=False):
         """
         Génère de petites lignes blanches pour simuler l'air.
-        est_balle: Si vrai, effet plus petit.
+        est_balle: Si vrai, effet plus fréquent et petit.
         """
-        seuil = 0.5 if est_balle else 0.4
+        seuil = 0.8 if est_balle else 0.4 # Augmenté pour les balles
         if random.random() > seuil: return 
         
         # Centre approximatif
@@ -177,21 +181,16 @@ class GestionnaireParticules:
 
 
     def mettre_a_jour(self):
-        # Mettre à jour et filtrer les particules mortes
-        self.particules = [p for p in self.particules if p.vie > 0]
-        for p in self.particules:
-            p.mettre_a_jour()
+        # Mise à jour et filtrage optimisé
+        self.particules = [p for p in self.particules if p.mettre_a_jour()]
 
     def dessiner(self):
+        # Mise en cache locale des méthodes pour la rapidité
         for p in self.particules:
             p.dessiner()
 
 # Gestionnaire global (géré dans Jeu)
 particules = None 
-
-# ==========================================
-# CLASSES DU JEU
-# ==========================================
 
 class Personnage:
     def __init__(self):
@@ -200,12 +199,21 @@ class Personnage:
         self.w = 8
         self.h = 8
         self.apparence = 0
+        self.bouclier = False
+        self.magnetisme = 0 # Timer
+        self.invincible = 0 # Timer
         
     def placer_menu(self):
         self.x, self.y = 160, 37
+        self.bouclier = False
+        self.magnetisme = 0
+        self.invincible = 0
         
     def placer_partie(self):
         self.x, self.y = 96, 20
+        self.bouclier = False
+        self.magnetisme = 0
+        self.invincible = 0
         
     def gauche(self, vitesse=1):
         if self.x > 0:
@@ -229,9 +237,21 @@ class Personnage:
 
     def changement_apparence(self, val):
         self.apparence = max(0, min(11, self.apparence + val))
-        
+
     def afficher(self):
+        # Effet d'invincibilité (clignotement)
+        if self.invincible > 0:
+            if (pyxel.frame_count // 2) % 2 == 0: return
+            
         pyxel.blt(self.x, self.y, 1, 0, 8 * self.apparence, 8, 8, 0)
+        # Aura du bouclier
+        if self.bouclier:
+            t = pyxel.frame_count
+            pyxel.circb(self.x + 4, self.y + 4, 6 + math.sin(t*0.2)*1, 12)
+        # Effet magnétisme
+        if self.magnetisme > 0:
+            if (pyxel.frame_count // 10) % 2 == 0:
+                pyxel.circb(self.x + 4, self.y + 4, 8, 10)
 
 class Piece:
     def __init__(self, x, y):
@@ -244,14 +264,36 @@ class Piece:
         return verifier_collision(self.x - 1, self.y - 1, 4, 4, mk_x, mk_y, 8, 8)
     
     def faire_reapparaitre(self):
-        self.x = random.randint(5, 195)
-        self.y = random.randint(5, 55)
+        self.x = random.randint(10, 190)
+        self.y = random.randint(10, 50)
 
     def afficher(self):
         pyxel.circ(self.x, self.y, 1, 10)
 
+class Bonus:
+    def __init__(self, x, y, type_bonus):
+        self.x = x
+        self.y = y
+        self.type = type_bonus # "BOUCLIER" ou "AIMANT"
+        self.vie = 300 # 5 secondes à 60fps
+        self.clignotement = 0
+        
+    def verifier_collision(self, mk_x, mk_y):
+        return verifier_collision(self.x - 2, self.y - 2, 5, 5, mk_x, mk_y, 8, 8)
+        
+    def mettre_a_jour(self):
+        self.vie -= 1
+        self.clignotement = (self.clignotement + 1) % 10
+        return self.vie > 0
+        
+    def afficher(self):
+        if self.vie < 60 and self.clignotement < 5: return
+        # Coordonnées fournies : Bouclier (0, 136), Aimant (0, 144)
+        v = 136 if self.type == "BOUCLIER" else 144
+        pyxel.blt(self.x - 4, self.y - 4, 0, 0, v, 8, 8, 0)
+
 class Balle:
-    def __init__(self, vitesse, dx, dy, apparence):
+    def __init__(self, vitesse, dx, dy, apparence, snipe_auto=False):
         self.x = 100
         self.y = 50
         self.w = 6 
@@ -260,52 +302,120 @@ class Balle:
         self.dx = dx * self.vitesse
         self.dy = dy * self.vitesse
         self.apparence = apparence
+        self.col_contour = COULEURS_CONTRASTE.get(apparence, 7)
+        # Système de traînée pour la fluidité visuelle
+        self.trainee = [] 
+        self.max_trainee = 5
         
-    def deplacer(self):
-        self.x += self.dx
-        self.y += self.dy
+        # Mode Sniper
+        self.mode = "NORMAL"
+        self.timer_snipe = random.randint(300, 600) if snipe_auto else 0
+        self.snipe_auto = snipe_auto
+        self.target_dx = 0
+        self.target_dy = 0
+        
+    def deplacer(self, target_x=None, target_y=None):
+        if self.mode == "NORMAL" and self.snipe_auto:
+            self.timer_snipe -= 1
+            if self.timer_snipe <= 0:
+                self.forcer_snipe()
+        
+        if self.mode == "STOP":
+            self.timer_snipe -= 1
+            if self.timer_snipe <= 0:
+                # Calcul direction vers CENTRE de la cible
+                if target_x is not None:
+                    dx = (target_x + 4) - self.x
+                    dy = (target_y + 4) - self.y
+                    dist = math.sqrt(dx*dx + dy*dy)
+                    if dist > 0:
+                        self.mode = "SNIPE"
+                        # Fonce 4.5x plus vite (plus équilibré)
+                        v = self.vitesse * 4.5
+                        self.target_dx = (dx / dist) * v
+                        self.target_dy = (dy / dist) * v
+                else:
+                    self.mode = "NORMAL"
+                    if self.snipe_auto: self.timer_snipe = 600
+                    
+        if self.mode == "SNIPE":
+            # Traînée spécifique plus longue
+            self.trainee.insert(0, (self.x, self.y))
+            if len(self.trainee) > 10: self.trainee.pop()
+            self.x += self.target_dx
+            self.y += self.target_dy
+        else:
+            # Mode NORMAL ou STOP
+            self.trainee.insert(0, (self.x, self.y))
+            if len(self.trainee) > self.max_trainee:
+                self.trainee.pop()
+                
+            if self.mode == "NORMAL":
+                self.x += self.dx
+                self.y += self.dy
+
+    def forcer_snipe(self):
+        if self.mode == "NORMAL":
+            self.mode = "STOP"
+            self.timer_snipe = 60 # S'arrête 1 sec
     
     def verifier_collision(self, mk_x, mk_y):
         return verifier_collision(self.x - 3, self.y - 3, 6, 6, mk_x, mk_y, 8, 8)
 
     def remplacer(self, tuple_dx_dy):
-        self.dx = tuple_dx_dy[0] * self.vitesse
-        self.dy = tuple_dx_dy[1] * self.vitesse
+        v = self.vitesse
+        self.dx = tuple_dx_dy[0] * v
+        self.dy = tuple_dx_dy[1] * v
         pyxel.play(1, 1)
 
     def rebonds(self):
+        old_mode = self.mode
         touche = False
         # Mur Gauche
-        if self.x - 3 < 0:
+        x, y = self.x, self.y
+        if x < 3:
             self.remplacer(random.choice([(1, -1), (2, 0), (1, 1)]))
-            particules.ajouter_impact_mur(0, self.y, 1, 0)
+            particules.ajouter_impact_mur(0, y, 1, 0)
+            touche = True
+        elif x > ECRAN_L - 3:
+            self.remplacer(random.choice([(-1, -1), (-2, 0), (1, 1)]))
+            particules.ajouter_impact_mur(ECRAN_L, y, -1, 0)
             touche = True
         
-        # Mur Droit
-        elif self.x + 3 > ECRAN_L:
-            self.remplacer(random.choice([(-1, -1), (-2, 0), (1, 1)]))
-            particules.ajouter_impact_mur(ECRAN_L, self.y, -1, 0)
-            touche = True
-            
-        # Mur Haut
-        if self.y - 3 < 0:
+        if y < 3:
             self.remplacer(random.choice([(-1, 1), (0, 1), (1, 1)]))
-            particules.ajouter_impact_mur(self.x, 0, 0, 1)
+            particules.ajouter_impact_mur(x, 0, 0, 1)
             touche = True
-            
-        # Mur Bas (Limite zone de jeu ~60)
-        elif self.y + 3 > 60:
+        elif y > 57:
             self.remplacer(random.choice([(-1, -1), (0, -1), (1, -1)]))
-            particules.ajouter_impact_mur(self.x, 60, 0, -1)
+            particules.ajouter_impact_mur(x, 60, 0, -1)
             touche = True
             
+        if old_mode == "SNIPE" and touche:
+            self.mode = "NORMAL"
+            if self.snipe_auto:
+                self.timer_snipe = random.randint(300, 600)
+
     def afficher(self):
-        # Couleur contour
-        col_contour = COULEURS_CONTRASTE.get(self.apparence, 7)
-        # Cercle plein (contour)
-        pyxel.circ(self.x, self.y, 3, col_contour)
-        # Cercle interieur (couleur balle, plus petit de 1px)
-        pyxel.circ(self.x, self.y, 2, self.apparence)
+        circ = pyxel.circ
+        if self.mode == "STOP":
+            col = 9 if (pyxel.frame_count // 4) % 2 == 0 else self.apparence
+            circ(self.x, self.y, 3, 7)
+            circ(self.x, self.y, 2, col)
+        elif self.mode == "SNIPE":
+            for i, pos in enumerate(self.trainee):
+                pyxel.pset(pos[0], pos[1], 8 if i % 2 == 0 else 7)
+            circ(self.x, self.y, 3, 8)
+            circ(self.x, self.y, 2, 7)
+        else:
+            # Rendu classique
+            col_app = self.apparence
+            col_cur = self.col_contour
+            for i, pos in enumerate(self.trainee):
+                rayon = 2 if i < 2 else 1
+                circ(pos[0], pos[1], rayon, COL_GRIS if i > 1 else col_app)
+            circ(self.x, self.y, 3, col_cur)
+            circ(self.x, self.y, 2, col_app)
 
 # ==========================================
 # CLASSE PRINCIPALE JEU
@@ -326,8 +436,8 @@ class Jeu:
 
         # États
         self.etat = "INTRO" # INTRO, AVERTISSEMENT, MENU, JEU, FIN
-        self.temps_debut_intro = time.time()
-        self.temps_debut_avertissement = 0
+        self.frame_debut_intro = pyxel.frame_count
+        self.frame_debut_avertissement = 0
         
         # Config
         self.clavier = True
@@ -338,11 +448,14 @@ class Jeu:
         self.personnage = Personnage()
         self.piece = Piece(100, 35)
         self.tab_balles = []
+        self.tab_bonus = []
         
         # Données Jeu
         self.score = 0
-        self.temps_debut = 0
+        self.frame_debut_jeu = 0
         self.temps_actuel = 0
+        self.timer_bonus = 600 # 10 secondes
+        self.timer_snipe_event = 180 # 3 sec avant premier event
         
         # Audio
         pyxel.playm(0) 
@@ -356,17 +469,22 @@ class Jeu:
     def lancer_partie(self):
         self.etat = "JEU"
         self.personnage.placer_partie()
-        self.temps_debut = time.time()
+        self.frame_debut_jeu = pyxel.frame_count
         self.score = 0
         
-        # Création balles
+        # Création balles (jusqu'à 5)
+        # La première balle est TOUJOURS un sniper automatique
         balles_base = [
-            Balle(0.3, -1, 0, self.balle_apparence),
+            Balle(0.3, -1, 0, self.balle_apparence, snipe_auto=True),
             Balle(0.3, 1, 0, self.balle_apparence),
-            Balle(0.3, 0, 1, self.balle_apparence)
+            Balle(0.35, 0, 1, self.balle_apparence),
+            Balle(0.35, -1, -1, self.balle_apparence),
+            Balle(0.32, 1, 1, self.balle_apparence)
         ]
         self.tab_balles = balles_base[:self.nombre_balles]
         self.piece = Piece(100, 35)
+        self.tab_bonus = []
+        self.timer_snipe_event = random.randint(180, 400)
 
     def retour_menu(self):
         self.etat = "MENU"
@@ -374,12 +492,12 @@ class Jeu:
         self.tab_balles = []
         
     def gestion_intro(self):
-        if time.time() - self.temps_debut_intro >= 2: 
+        if pyxel.frame_count - self.frame_debut_intro >= 120: # 2 secondes
             self.etat = "AVERTISSEMENT"
-            self.temps_debut_avertissement = time.time()
+            self.frame_debut_avertissement = pyxel.frame_count
 
     def gestion_avertissement(self):
-        if time.time() - self.temps_debut_avertissement >= 5:
+        if pyxel.frame_count - self.frame_debut_avertissement >= 300: # 5 secondes
             self.retour_menu()
 
     def gestion_menu(self):
@@ -413,7 +531,7 @@ class Jeu:
             elif 45 <= my <= 53:
                 if 18 <= mx <= 26 and self.nombre_balles > 1:
                     self.nombre_balles -= 1
-                elif 34 <= mx <= 42 and self.nombre_balles < 3:
+                elif 34 <= mx <= 42 and self.nombre_balles < 5:
                      self.nombre_balles += 1
 
     def gestion_jeu(self):
@@ -425,31 +543,81 @@ class Jeu:
             if (pyxel.btn(pyxel.KEY_S) or pyxel.btn(pyxel.GAMEPAD1_BUTTON_DPAD_DOWN)): self.personnage.bas()
         else:
             mx, my = pyxel.mouse_x, pyxel.mouse_y
-            if pyxel.btn(pyxel.MOUSE_BUTTON_LEFT):
-                 if 136 <= mx <= 152 and 76 <= my <= 92: self.personnage.gauche()
-                 if 168 <= mx <= 184 and 76 <= my <= 92: self.personnage.droite()
-                 if 152 <= mx <= 168 and 60 <= my <= 76: self.personnage.haut()
-                 if 152 <= mx <= 168 and 76 <= my <= 92: self.personnage.bas()
+        # Mise à jour des timers perso
+        if self.personnage.invincible > 0: self.personnage.invincible -= 1
+        px, py = self.personnage.x, self.personnage.y
+        # Balles et Événement Snipe Aléatoire
+        self.timer_snipe_event -= 1
+        if self.timer_snipe_event <= 0:
+            if self.tab_balles:
+                # On choisit une balle au hasard pour viser le joueur
+                random.choice(self.tab_balles).forcer_snipe()
+                self.timer_snipe_event = random.randint(180, 500) # Min 3 sec
 
-        # Balles
         for balle in self.tab_balles:
-            balle.deplacer()
-            balle.rebonds()
-            if balle.verifier_collision(self.personnage.x, self.personnage.y):
-                self.etat = "FIN"
-                pyxel.play(0, 3)
+            balle.deplacer(px, py)
+            balle.rebonds() 
+            if self.personnage.invincible <= 0 and balle.verifier_collision(px, py):
+                if self.personnage.bouclier:
+                    # Le bouclier sauve !
+                    self.personnage.bouclier = False
+                    self.personnage.invincible = 120 # 2 sec d'immunité
+                    # Effet d'éclatement bleu
+                    for _ in range(10): 
+                        particules.particules.append(Particule(px+4, py+4, random.uniform(-2,2), random.uniform(-2,2), 15, 12))
+                    # On fait rebondir la balle pour ne pas mourir
+                    balle.remplacer((random.uniform(-1,1), random.uniform(-1,1)))
+                    pyxel.play(1, 2)
+                else:
+                    self.etat = "FIN"
+                    pyxel.play(0, 3)
+                    break # Arrêt immédiat de la boucle
 
         # Pièce
-        if self.piece.verifier_collision(self.personnage.x, self.personnage.y):
+        if self.personnage.magnetisme > 0:
+            self.personnage.magnetisme -= 1
+            # Optimisation : Distance au carré pour éviter sqrt inutile
+            dx = px - self.piece.x
+            dy = py - self.piece.y
+            dist_sq = dx*dx + dy*dy
+            if dist_sq < 1225: # 35 * 35
+                dist = math.sqrt(dist_sq)
+                if dist > 0:
+                    self.piece.x += (dx / dist) * 1.2
+                    self.piece.y += (dy / dist) * 1.2
+
+        if self.piece.verifier_collision(px, py):
             particules.ajouter_effet_piece(self.piece.x, self.piece.y)
             pyxel.play(0, 2)
             self.piece.faire_reapparaitre()
             self.score += 1
-            if self.score > 0 and self.score % 1 == 0:
-                for b in self.tab_balles: b.vitesse += 0.02
+            for b in self.tab_balles: b.vitesse += 0.02
+        
+        # Gestion du Spawn Temporel des Bonus
+        # Condition : pas de bouclier, pas d'aimant actif, et pas de bonus sur le terrain
+        if not self.personnage.bouclier and self.personnage.magnetisme <= 0 and not self.tab_bonus:
+            self.timer_bonus -= 1
+            if self.timer_bonus <= 0:
+                t = "BOUCLIER" if random.random() < 0.6 else "AIMANT"
+                self.tab_bonus.append(Bonus(random.randint(10, 190), random.randint(10, 50), t))
+                self.timer_bonus = 600 # Reset 10 sec
+        else:
+            # On ne reset pas le timer, mais on ne le décompte pas non plus
+            pass
 
-        # Chrono
-        self.temps_actuel = int(time.time() - self.temps_debut)
+        # Bonus
+        self.tab_bonus = [b for b in self.tab_bonus if b.mettre_a_jour()]
+        for b in self.tab_bonus:
+            if b.verifier_collision(px, py):
+                if b.type == "BOUCLIER":
+                    self.personnage.bouclier = True
+                else:
+                    self.personnage.magnetisme = 300 # 5 sec
+                b.vie = 0 # Désactiver
+                pyxel.play(1, 2)
+
+        # Chrono stable
+        self.temps_actuel = (pyxel.frame_count - self.frame_debut_jeu) // 60
         
         # Boutons Retour/Rejouer en jeu
         if pyxel.btnr(pyxel.MOUSE_BUTTON_LEFT):
@@ -469,7 +637,7 @@ class Jeu:
 
     def mettre_a_jour(self):
         particules.mettre_a_jour()
-
+        
         if self.etat == "INTRO":
             self.gestion_intro()
         elif self.etat == "AVERTISSEMENT":
@@ -546,7 +714,7 @@ class Jeu:
         # Flèche G
         pyxel.blt(18, 45, 0, (0 if self.nombre_balles > 1 else 16), 48, 8, 8)
         # Flèche D
-        pyxel.blt(34, 45, 0, (8 if self.nombre_balles < 3 else 24), 48, 8, 8)
+        pyxel.blt(34, 45, 0, (8 if self.nombre_balles < 5 else 24), 48, 8, 8)
         
         # Param Perso
         if self.personnage.apparence > 0:
@@ -565,7 +733,7 @@ class Jeu:
         # Bouton Clavier/Souris
         sprite_x = 0 if self.clavier else 16
         pyxel.blt(179, 5, 0, sprite_x, 16, 16, 16)
-
+        
         self.personnage.afficher()
 
     def dessiner_hud(self):
@@ -595,30 +763,28 @@ class Jeu:
 
     def dessiner(self):
         pyxel.cls(0)
+        e = self.etat
         
-        if self.etat == "INTRO":
+        if e == "INTRO":
             self.dessiner_intro()
-        elif self.etat == "AVERTISSEMENT":
+        elif e == "AVERTISSEMENT":
             self.dessiner_avertissement()
-        elif self.etat == "MENU":
+        elif e == "MENU":
             self.dessiner_menu()
-            
-        elif self.etat == "JEU":
+        elif e == "JEU":
             self.piece.afficher()
+            for b_bonus in self.tab_bonus: b_bonus.afficher()
             self.personnage.afficher()
             for b in self.tab_balles: b.afficher()
             particules.dessiner() 
             self.dessiner_hud()
-            
-        elif self.etat == "FIN":
-            # Fond gelé
+        elif e == "FIN":
             self.piece.afficher()
+            for b_bonus in self.tab_bonus: b_bonus.afficher()
             self.personnage.afficher()
             for b in self.tab_balles: b.afficher()
             particules.dessiner()
             self.dessiner_hud()
-            
-            # Message fin
             pyxel.text(78, 18, 'Partie\n  Terminee', 7)
 
 # Lancement

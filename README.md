@@ -12,19 +12,20 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 
 <img src="res/balle.png" /> <img src="res/crabe.png" />
 
-- Esquivez les balles : Utilisez votre réflexe et votre rapidité pour éviter les balles qui rebondissent sur les murs.
-- Collectez des pièces : Ramassez le plus de pièces pour accumuler des points.
-- Défiez-vous : Testez vos compétences en tentant d'obtenir le meilleur score possible dans ce jeu rapide et stimulant.
-- Graphismes rétro : Plongez dans une esthétique rétro avec des visuels charmants.
-- Facile à jouer, difficile à maîtriser : Accessible à tous, mais assez difficile pour défier même les joueurs les plus expérimentés.
+- **🏐 Esquivez les balles** : Utilisez vos réflexes pour éviter les balles classiques et les nouvelles **balles "Sniper"** qui vous traquent !
+- **🛡️ Défense & Bonus** : Récupérez des power-ups stratégiques comme le **Bouclier** (protection + immunité) ou l'**Aimant** pour attirer les pièces.
+- **🪙 Collectez des pièces** : Ramassez le plus de pièces pour accumuler des points et faire apparaître des bonus.
+- **💥 Défie-vous** : Testez vos compétences jusqu'à **5 balles simultanées** pour un défi extrême.
+- **👾 Graphismes rétro** : Plongez dans une esthétique rétro avec des visuels charmants.
+- **🕹️ Facile à jouer, difficile à maîtriser** : Accessible à tous, mais assez difficile pour défier même les joueurs les plus expérimentés.
 
 # Menu
 
 <img src="res/menu.png" style="zoom: 50%;"/>
 
 1. Changer la plateforme. Permet de désactiver l'affichage de la souris et de prendre en charge le tactile.
-   En mode PC, la croix directionnelle d'une manette est prise en compte.
-2. Changer le nombre de balles pendant la partie. (1, 2 ou 3 balles)
+   En mode PC, les touches ZQSD et la croix directionnelle d'une manette sont prises en compte.
+2. Changer le nombre de balles pendant la partie. (**Jusqu'à 5 balles !**)
 3. Changer la couleur de la balle ou des balles (15 couleurs)
 4. Changer le personnage (12 personnages)
 5. Bouton pour lancer une partie.
@@ -34,13 +35,17 @@ Plongez dans l'action avec _Ball Challenge_, un jeu d'arcade addictif où votre 
 
 <img src="res/partie.png" style="zoom: 50%;"/>
 
-1. Votre personnage (8x8 pixels).
-2. Une pièce qui doit être ramassée pour augmenter le score.
-3. La balle qu'il faut éviter. Attention, elles rebondissent aléatoirement sur les murs.
-4. Bouton pour retourner au menu.
-5. Bouton pour relancer la partie.
-6. Les informations de la partie. Cette zone indique le nombre de balles, le nombre de pièces ramassées et la durée (en secondes) de la partie.
-7. Indication des touches à appuyer pour bouger votre personnage.
+1. **Votre personnage** : 8x8 pixels
+2. **Une pièce** : Indispensable pour augmenter le score.
+3. **Balle classique** : Rebondit sur les murs et doit être évitée.
+4. **Balle Sniper** : S'arrête pour charger son tir avant de foncer droit sur vous !
+5. **Les Power-ups** (Apparaissent toutes les 10 secondes) :
+   - 🛡️ **Bouclier** : Protège d'un coup et rend invincible 2 secondes après un coup reçu.
+   - 🧲 **Aimant** : Attire les pièces vers vous pendant 5 secondes.
+6. **Bouton Menu** : Pour quitter la partie et revenir à l'écran d'accueil.
+7. **Bouton Rejouer** : Pour relancer instantanément une nouvelle partie.
+8. **Infos de jeu** : Affiche le nombre de balles, votre score et le temps survécu.
+9. **Touches de contrôle** : Rappel des touches utilisées (ZQSD ou croix tactile).
 
 _Remarque :_
 
